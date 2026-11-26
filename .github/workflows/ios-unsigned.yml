@@ -14,19 +14,18 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install dependencies & sync Capacitor
-        run: |
-          npm install
-          npx cap sync ios
+      - name: Install dependencies
+        run: npm install
 
-      - name: Install CocoaPods
+      - name: Clean and generate fresh iOS platform
         run: |
-          cd ios/App
-          pod install
+          rm -rf ios
+          npx cap add ios
+          npx cap sync ios
 
       - name: Build unsigned archive
         run: |
-          xcodebuild -workspace ios/App/App.xcworkspace \
+          xcodebuild -project ios/App/App.xcodeproj \
             -scheme App \
             -configuration Release \
             -sdk iphoneos \
